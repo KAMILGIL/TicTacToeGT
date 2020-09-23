@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class BoxScript : MonoBehaviour
 {
+    public float speedS = 0.1f;
+    public float maxVisiblity = 0.5f; 
+
     private Material material;
-    private float changingSpeed = 0; 
+    private float changingSpeed = 0;
 
     private void Start()
     {
-        this.material = GetComponent<MeshRenderer>().material; 
+        this.material = GetComponent<MeshRenderer>().material;
+
+        Color newColor = this.material.color;
+
+        newColor.a = 0;
+
+        this.material.color = newColor;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        Debug.Log(this.material.color.a); 
         Color newColor = material.color;
 
-        newColor.a += changingSpeed * Time.deltaTime;
-        if (newColor.a >= 256)
+        newColor.a += changingSpeed;
+        if (newColor.a >= maxVisiblity)
         {
-            newColor.a = 256;
+            newColor.a = maxVisiblity;
             changingSpeed = 0; 
         } 
         else if (newColor.a <= 0)
@@ -33,11 +43,11 @@ public class BoxScript : MonoBehaviour
 
     public void StartGlowing()
     {
-        changingSpeed = 0.1f; 
+        changingSpeed = speedS; 
     } 
 
     public void StartFading()
     {
-        changingSpeed = -0.1f; 
+        changingSpeed = -speedS; 
     } 
 }

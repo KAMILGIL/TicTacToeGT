@@ -17,17 +17,37 @@ public class CameraScript : MonoBehaviour
 
     public bool CameraEnabled = false;
 
+    public GameObject field;
+    private GameObject[,,] ar = new GameObject[3, 3, 3];
+    private FieldScript fieldScript; 
+
 
     // Use this for initialization
     void Start()
     {
         this._XForm_Camera = this.transform;
         this._XForm_Parent = this.transform.parent;
+
+        fieldScript = field.GetComponent<FieldScript>(); 
     }
 
 
     void Update()
     {
+        RaycastHit hit;
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        fieldScript.StartHidingBoxes();
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            Transform objectHit = hit.transform;
+
+            BoxScript boxScript = objectHit.gameObject.GetComponent<BoxScript>();
+
+            boxScript.StartGlowing(); 
+        }
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             if (Camera.main.orthographic)
@@ -40,11 +60,11 @@ public class CameraScript : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         {
             CameraEnabled = true;
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(1))
         {
             CameraEnabled = false;
         }
