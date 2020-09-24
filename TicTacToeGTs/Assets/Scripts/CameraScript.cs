@@ -19,7 +19,9 @@ public class CameraScript : MonoBehaviour
 
     public GameObject field;
     private GameObject[,,] ar = new GameObject[3, 3, 3];
-    private FieldScript fieldScript; 
+    private FieldScript fieldScript;
+
+    private bool MouseButton2Down = false; 
 
 
     // Use this for initialization
@@ -39,14 +41,32 @@ public class CameraScript : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         fieldScript.StartHidingBoxes();
 
-        if (Physics.Raycast(ray, out hit))
+        if (Input.GetMouseButtonDown(2) || MouseButton2Down)
+        {
+            BoxScript boxScript = fieldScript.ar[1, 1, 1].gameObject.GetComponent<BoxScript>();
+
+            boxScript.StartGlowing();
+            MouseButton2Down = true;
+        }
+        if (Input.GetMouseButtonUp(2))
+        {
+            MouseButton2Down = false;
+            BoxScript boxScript = fieldScript.ar[1, 1, 1].gameObject.GetComponent<BoxScript>();
+            fieldScript.MakePlayerMove(boxScript.gameObject);
+        }
+        else if (Physics.Raycast(ray, out hit))
         {
             Transform objectHit = hit.transform;
 
             BoxScript boxScript = objectHit.gameObject.GetComponent<BoxScript>();
 
             boxScript.StartGlowing(); 
-        }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                fieldScript.MakePlayerMove(boxScript.gameObject);
+            }
+        } 
 
         if (Input.GetKeyDown(KeyCode.A))
         {

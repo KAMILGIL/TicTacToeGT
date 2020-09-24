@@ -108,3 +108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedS: 0.1
   maxVisiblity: 0.5
+  redPointPrefab: {fileID: 3571274821257136595, guid: a933c22314c2a7a42a91acdde8b4733b,
+    type: 3}
+  bluePointPrefab: {fileID: 6557820857069154816, guid: b3e2e3c38fe1cb746b51ce1ad4a74bc7,
+    type: 3}
+  boxType: 2

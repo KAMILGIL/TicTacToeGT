@@ -4,11 +4,29 @@ using UnityEngine;
 
 public class BoxScript : MonoBehaviour
 {
+    [HideInInspector]
+    int i, j, k; 
+
     public float speedS = 0.1f;
-    public float maxVisiblity = 0.5f; 
+    public float maxVisiblity = 0.5f;
+
+    public GameObject redPointPrefab;
+    public GameObject bluePointPrefab;
+
+    [HideInInspector]
+    public BoxType boxType = BoxType.None;
+
+    private GameObject skin; 
 
     private Material material;
     private float changingSpeed = 0;
+
+    public void SetIndex(int i, int j, int k)
+    {
+        this.i = i;
+        this.j = j;
+        this.k = k; 
+    }
 
     private void Start()
     {
@@ -19,11 +37,12 @@ public class BoxScript : MonoBehaviour
         newColor.a = 0;
 
         this.material.color = newColor;
+
+        this.boxType = BoxType.None;
     }
 
     private void FixedUpdate()
     {
-        Debug.Log(this.material.color.a); 
         Color newColor = material.color;
 
         newColor.a += changingSpeed;
@@ -49,5 +68,45 @@ public class BoxScript : MonoBehaviour
     public void StartFading()
     {
         changingSpeed = -speedS; 
+    } 
+
+    public void MakePlayerMove()
+    {
+        if (boxType == BoxType.None)
+        {
+            boxType = BoxType.Blue; 
+        } 
+        SpawnSkin(); 
+    }
+
+    public void MakeComputerMove()
+    {
+        if (boxType == BoxType.None)
+        {
+            boxType = BoxType.Red;
+        }
+        SpawnSkin();
+    }
+
+    public void SpawnSkin()
+    {
+        if (boxType == BoxType.Blue)
+        {
+            skin = Instantiate(bluePointPrefab, Vector3.zero, Quaternion.identity);
+            skin.transform.parent = transform;
+            skin.transform.localPosition = Vector3.zero;
+        } 
+        else if (boxType == BoxType.Red)
+        {
+            skin = Instantiate(redPointPrefab, Vector3.zero, Quaternion.identity);
+            skin.transform.parent = transform;
+            skin.transform.localPosition = Vector3.zero;
+        }
+    }
+
+    public void Clear()
+    {
+        boxType = BoxType.None;
+        Destroy(skin); 
     } 
 }
